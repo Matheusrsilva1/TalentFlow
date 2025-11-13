@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard de Talentos | TalentFlow{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <div class="dashboard-header">
+        <h1>Encontre Talentos na sua Equipe</h1>
+        <p>Use a busca para descobrir habilidades e potenciais ocultos.</p>
+        <form action="{{ url_for('main.dashboard') }}" method="get" class="form-busca">
+            <input type="text" name="busca_habilidade" placeholder="Busque por uma habilidade (ex: Python, AWS, Liderança)" value="{{ query or '' }}">
+            <button type="submit" class="btn btn-primario">Buscar</button>
+        </form>
+    </div>
+
+    <div class="grid-funcionarios">
+        <h2>Colaboradores</h2>
+        {% if funcionarios %}
+            {% for funcionario in funcionarios %}
+                <div class="card card-funcionario">
+                    <h3>{{ funcionario.nome }}</h3>
+                    <p>{{ funcionario.cargo }}</p>
+                    <div class="card-footer">
+                        <a href="{{ url_for('main.perfil', id=funcionario.id) }}" class="btn btn-primario btn-ver-perfil">Ver Perfil</a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+                <p>Nenhum funcionário encontrado.</p>
+            {% endif %}
+        </div>
+</section>
+{% endblock %}

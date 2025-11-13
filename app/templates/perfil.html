@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Passaporte de Skills de {{ funcionario.nome }} | TalentFlow{% endblock %}
+
+{% block content %}
+<div class="container-perfil">
+    <a href="{{ url_for('main.dashboard') }}" class="btn btn-voltar">&larr; Voltar para o Dashboard</a>
+
+    <div class="grid-perfil">
+        <div class="card card-perfil">
+            <h1>{{ funcionario.nome }}</h1>
+            <p class="cargo">{{ funcionario.cargo }}</p>
+            <p><strong>Email:</strong> {{ funcionario.email }}</p>
+        </div>
+
+        <div class="habilidades">
+            <div class="habilidades-declaradas">
+                <h2>Habilidades Declaradas</h2>
+                {% if funcionario.habilidades_declaradas %}
+                    <ul>
+                        {% for habilidade in funcionario.habilidades_declaradas %}
+                            <li>{{ habilidade }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>Nenhuma habilidade declarada.</p>
+                {% endif %}
+            </div>
+
+            <div class="habilidades-descobertas">
+                <h2>Habilidades Descobertas (pela IA)</h2>
+                {% if funcionario.habilidades_descobertas %}
+                    <ul>
+                        {% for habilidade in funcionario.habilidades_descobertas %}
+                            <li>
+                                <strong>{{ habilidade.skill }}</strong>
+                                <span class="detalhe-habilidade">(Descoberta em {{ habilidade.data }} via {{ habilidade.origem }})</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>Nenhuma habilidade descoberta ainda.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="recomendacoes">
+            <h2>Oportunidades Internas Recomendadas</h2>
+            {% if funcionario.recomendacoes_vagas %}
+                <div class="lista-recomendacoes">
+                    {% for recomendacao in funcionario.recomendacoes_vagas %}
+                        <div class="card card-recomendacao">
+                            <h3>{{ recomendacao.cargo }}</h3>
+                            <div class="compatibilidade">
+                                <p>Compatibilidade: <strong>{{ recomendacao.compatibilidade }}%</strong></p>
+                                <div class="barra-progresso-container">
+                                    <div class="barra-progresso" data-percentual="{{ recomendacao.compatibilidade }}"></div>
+                                </div>
+                            </div>
+                            <div class="detalhes-recomendacao">
+                                <p><strong>Habilidades em comum:</strong> {{ recomendacao.habilidades_em_comum | join(', ') }}</p>
+                                <p><strong>Habilidades a desenvolver:</strong> {{ recomendacao.habilidades_a_desenvolver | join(', ') }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>Nenhuma oportunidade interna recomendada no momento.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
