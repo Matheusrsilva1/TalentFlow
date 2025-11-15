@@ -8,13 +8,16 @@
 </head>
 <body>
     <header>
-        <a href="{{ url_for('main.dashboard') }}" class="logo">TalentFlow</a>
-        <nav>
-            <ul>
-                <li><a href="{{ url_for('main.dashboard') }}">Dashboard</a></li>
-                <!-- Adicionar outros links de navegação aqui se necessário -->
-            </ul>
-        </nav>
+        <div class="header-inner">
+            <a href="{{ url_for('main.dashboard') }}" class="logo">TalentFlow</a>
+            <button class="menu-toggle" aria-label="Abrir menu" aria-expanded="false"></button>
+            <nav class="site-nav">
+                <ul>
+                    <li><a href="{{ url_for('main.dashboard') }}" {% if request.endpoint in ['main.dashboard'] %}aria-current="page"{% endif %}>Dashboard</a></li>
+                    <li><a href="{{ url_for('main.graficos') }}" {% if request.endpoint in ['main.graficos'] %}aria-current="page"{% endif %}>Gráficos</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>
 
     <main>
@@ -34,6 +37,21 @@
                     barra.style.width = percentual + '%';
                 }
             });
+            const heatmapCells = document.querySelectorAll('.heatmap-cell[data-percent]');
+            heatmapCells.forEach(el => {
+                const p = parseFloat(el.getAttribute('data-percent'));
+                if (!isNaN(p)) {
+                    el.style.background = 'linear-gradient(90deg, var(--cor-sucesso) ' + p + '%, #e0e0e0 ' + p + '%)';
+                }
+            });
+            const toggle = document.querySelector('.menu-toggle');
+            const nav = document.querySelector('.site-nav');
+            if (toggle && nav) {
+                toggle.addEventListener('click', function() {
+                    const open = nav.classList.toggle('open');
+                    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+                });
+            }
         });
     </script>
 </body>

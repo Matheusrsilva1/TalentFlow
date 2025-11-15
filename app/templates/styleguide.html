@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Guia de Estilo | TalentFlow{% endblock %}
+
+{% block content %}
+<div class="card">
+  <h1>Guia de Estilo TalentFlow</h1>
+  <p class="texto-secundario">Decisões de design para consistência visual, acessibilidade e UX.</p>
+</div>
+
+<div class="dashboard-layout">
+  <aside class="card">
+    <h2>Paleta e Contraste</h2>
+    <p>Fundo branco, textos pretos. Verde para destaques e ações primárias.</p>
+    <ul>
+      <li><strong>Texto:</strong> #000000</li>
+      <li><strong>Fundo:</strong> #FFFFFF</li>
+      <li><strong>Destaque:</strong> #16A34A</li>
+      <li><strong>Neutro:</strong> #6B7280</li>
+    </ul>
+  </aside>
+  <section class="painel-conteudo">
+    <div class="card">
+      <h2>Tipografia</h2>
+      <p>Hierarquia com tamanhos claros e espaçamento confortável.</p>
+      <h1>Título H1</h1>
+      <h2>Título H2</h2>
+      <h3>Título H3</h3>
+      <p>Parágrafo de exemplo com texto padrão.</p>
+      <p class="texto-secundario">Parágrafo secundário para informações de apoio.</p>
+    </div>
+
+    <div class="card">
+      <h2>Botões</h2>
+      <p>Estados de interação com foco acessível e microinterações sutis.</p>
+      <div class="acoes">
+        <a class="btn btn-primario" href="#">Primário</a>
+        <a class="btn" href="#">Neutro</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Formulários</h2>
+      <form class="form-busca">
+        <input type="text" placeholder="Campo de texto" />
+        <select><option>Seleção</option></select>
+        <div class="acoes">
+          <button class="btn btn-primario" type="button">Enviar</button>
+          <button class="btn" type="button">Cancelar</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Cartões e Grid</h2>
+      <div class="grid-funcionarios">
+        <div class="card card-funcionario">
+          <h3>Nome Exemplo</h3>
+          <p>Cargo</p>
+          <p>Melhor compatibilidade: <span class="numero-destaque">78%</span></p>
+          <div class="card-footer">
+            <a href="#" class="btn btn-primario btn-ver-perfil">Ver Perfil</a>
+          </div>
+        </div>
+        <div class="card card-funcionario">
+          <h3>Nome Exemplo</h3>
+          <p>Cargo</p>
+          <p>Melhor compatibilidade: <span class="numero-destaque">52%</span></p>
+          <div class="card-footer">
+            <a href="#" class="btn btn-primario btn-ver-perfil">Ver Perfil</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Estados e Acessibilidade</h2>
+      <ul>
+        <li>Foco visível em botões (.btn:focus-visible)</li>
+        <li>Hover/Active em botões (.btn:hover / .btn:active)</li>
+        <li>Inputs com foco e hover diferenciados</li>
+      </ul>
+    </div>
+  </section>
+</div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Importar Usuários via XLSX | TalentFlow{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>Importar Usuários</h1>
+    <p>Use o arquivo modelo <code>app/data/funcionarios_modelo.xlsx</code>.</p>
+    <form action="{{ url_for('main.upload_usuarios') }}" method="post" enctype="multipart/form-data" class="form-busca">
+        <input type="file" name="arquivo" accept=".xlsx" required>
+        <button type="submit" class="btn btn-primario">Importar</button>
+        <a href="{{ url_for('main.dashboard') }}" class="btn btn-voltar">Voltar</a>
+    </form>
+</div>
+{% endblock %}

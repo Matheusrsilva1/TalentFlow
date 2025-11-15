@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}KPIs e Gráficos | TalentFlow{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>KPIs e Gráficos</h1>
+    <p>Indicadores agregados de skills, compatibilidade e cobertura de projetos.</p>
+</div>
+
+<div class="grid-graficos">
+    <div class="card">
+        <h2>Top 10 Skills</h2>
+        <canvas id="skillsChart"></canvas>
+    </div>
+    <div class="card">
+        <h2>Colaboradores por Área (melhor compatibilidade)</h2>
+        <canvas id="areaChart"></canvas>
+    </div>
+    <div class="card">
+        <h2>Distribuição de Compatibilidade</h2>
+        <canvas id="compatChart"></canvas>
+    </div>
+    <div class="card">
+        <h2>Média de Cobertura de Skills por Projeto</h2>
+        <canvas id="projChart"></canvas>
+    </div>
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const topLabels = {{ top_labels|tojson }};
+    const topValues = {{ top_values|tojson }};
+    const areaLabels = {{ area_labels|tojson }};
+    const areaValues = {{ area_values|tojson }};
+    const distLabels = {{ dist_labels|tojson }};
+    const distValues = {{ dist_values|tojson }};
+    const projLabels = {{ proj_labels|tojson }};
+    const projValues = {{ proj_values|tojson }};
+
+    const skillsCtx = document.getElementById('skillsChart').getContext('2d');
+    new Chart(skillsCtx, {
+        type: 'bar',
+        data: { labels: topLabels, datasets: [{ label: 'Ocorrências', data: topValues, backgroundColor: '#3498db' }] },
+        options: { responsive: true, scales: { y: { beginAtZero: true } } }
+    });
+
+    const areaCtx = document.getElementById('areaChart').getContext('2d');
+    new Chart(areaCtx, {
+        type: 'pie',
+        data: { labels: areaLabels, datasets: [{ data: areaValues, backgroundColor: ['#3498db','#2ecc71','#e74c3c','#9b59b6','#f1c40f'] }] },
+        options: { responsive: true }
+    });
+
+    const compatCtx = document.getElementById('compatChart').getContext('2d');
+    new Chart(compatCtx, {
+        type: 'bar',
+        data: { labels: distLabels, datasets: [{ label: 'Colaboradores', data: distValues, backgroundColor: '#2c3e50' }] },
+        options: { responsive: true, scales: { y: { beginAtZero: true } } }
+    });
+
+    const projCtx = document.getElementById('projChart').getContext('2d');
+    new Chart(projCtx, {
+        type: 'bar',
+        data: { labels: projLabels, datasets: [{ label: 'Cobertura média (%)', data: projValues, backgroundColor: '#2ecc71' }] },
+        options: { responsive: true, scales: { y: { beginAtZero: true, max: 100 } } }
+    });
+</script>
+{% endblock %}

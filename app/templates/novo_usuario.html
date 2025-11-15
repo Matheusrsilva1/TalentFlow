@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Novo Usuário | TalentFlow{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>Novo Usuário</h1>
+    <form action="{{ url_for('main.novo_usuario') }}" method="post" class="form-busca">
+        <input type="text" name="nome" placeholder="Nome" required>
+        <input type="text" name="cargo" placeholder="Cargo" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="text" name="habilidades_declaradas" placeholder="Habilidades declaradas (separe por vírgula)">
+        <button type="submit" class="btn btn-primario">Salvar</button>
+        <a href="{{ url_for('main.dashboard') }}" class="btn btn-voltar">Cancelar</a>
+    </form>
+    <p>Ex.: habilidades declaradas: Python, SQL, Power BI</p>
+</div>
+{% endblock %}

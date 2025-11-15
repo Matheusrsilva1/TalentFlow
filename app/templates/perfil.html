@@ -11,6 +11,9 @@
             <h1>{{ funcionario.nome }}</h1>
             <p class="cargo">{{ funcionario.cargo }}</p>
             <p><strong>Email:</strong> {{ funcionario.email }}</p>
+            <form action="{{ url_for('main.plano_carreira', id=funcionario.id) }}" method="post" style="margin-top:1rem">
+                <button type="submit" class="btn btn-primario">Criar plano de carreira</button>
+            </form>
         </div>
 
         <div class="habilidades">
@@ -50,7 +53,8 @@
                 <div class="lista-recomendacoes">
                     {% for recomendacao in funcionario.recomendacoes_vagas %}
                         <div class="card card-recomendacao">
-                            <h3>{{ recomendacao.cargo }}</h3>
+                            <h3>{{ recomendacao.titulo }}</h3>
+                            
                             <div class="compatibilidade">
                                 <p>Compatibilidade: <strong>{{ recomendacao.compatibilidade }}%</strong></p>
                                 <div class="barra-progresso-container">
@@ -59,7 +63,19 @@
                             </div>
                             <div class="detalhes-recomendacao">
                                 <p><strong>Habilidades em comum:</strong> {{ recomendacao.habilidades_em_comum | join(', ') }}</p>
-                                <p><strong>Habilidades a desenvolver:</strong> {{ recomendacao.habilidades_a_desenvolver | join(', ') }}</p>
+                                <p><strong>Habilidades a desenvolver:</strong></p>
+                                {% if recomendacao.habilidades_a_desenvolver %}
+                                    <ul>
+                                        {% for s in recomendacao.habilidades_a_desenvolver %}
+                                            <li>
+                                                {{ s }} — 
+                                                <a href="#" class="btn" style="padding:0.3rem 0.6rem">Trilha: Introdução a {{ s }}</a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <p>Nenhuma habilidade pendente.</p>
+                                {% endif %}
                             </div>
                         </div>
                     {% endfor %}
@@ -68,6 +84,17 @@
                 <p>Nenhuma oportunidade interna recomendada no momento.</p>
             {% endif %}
         </div>
+
+        {% if funcionario.plano_carreira or funcionario.plano_carreira_erro %}
+        <div class="card">
+            <h2>Plano de Carreira (IA)</h2>
+            {% if funcionario.plano_carreira %}
+                <div style="white-space: pre-wrap;">{{ funcionario.plano_carreira }}</div>
+            {% else %}
+                <p>Erro ao gerar plano: {{ funcionario.plano_carreira_erro }}</p>
+            {% endif %}
+        </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

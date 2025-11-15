@@ -3,31 +3,107 @@
 {% block title %}Dashboard de Talentos | TalentFlow{% endblock %}
 
 {% block content %}
-<div class="dashboard">
-    <div class="dashboard-header">
-        <h1>Encontre Talentos na sua Equipe</h1>
-        <p>Use a busca para descobrir habilidades e potenciais ocultos.</p>
+<div class="dashboard-layout">
+    <aside class="card painel-filtros">
+        <h2>Filtros</h2>
+        {% if db_error %}
+        <div class="card alert-error" style="margin-top:0.5rem;">
+            {{ db_error }}
+        </div>
+        {% endif %}
+        <p class="texto-secundario">Use a busca para descobrir habilidades e potenciais ocultos.</p>
         <form action="{{ url_for('main.dashboard') }}" method="get" class="form-busca">
             <input type="text" name="busca_habilidade" placeholder="Busque por uma habilidade (ex: Python, AWS, Liderança)" value="{{ query or '' }}">
-            <button type="submit" class="btn btn-primario">Buscar</button>
+            <input type="text" name="cargo" placeholder="Filtrar por cargo" value="{{ filtro_cargo or '' }}">
+            <select name="area">
+                <option value="">Todas as áreas</option>
+                <option value="Tecnologia" {% if filtro_area=='Tecnologia' %}selected{% endif %}>Tecnologia</option>
+                <option value="Operações" {% if filtro_area=='Operações' %}selected{% endif %}>Operações</option>
+            </select>
+            <select name="ordem">
+                <option value="">Ordenar por nome</option>
+                <option value="compat" {% if ordem=='compat' %}selected{% endif %}>Ordenar por compatibilidade</option>
+            </select>
+            <div class="acoes">
+                <button type="submit" class="btn btn-primario">Aplicar</button>
+                <a href="{{ url_for('main.atualizar_skills') }}" class="btn">Atualizar skills</a>
+                <a href="{{ url_for('main.novo_usuario') }}" class="btn">Novo Usuário</a>
+                <a href="{{ url_for('main.upload_usuarios') }}" class="btn">Importar XLSX</a>
+            </div>
         </form>
-    </div>
+    </aside>
 
-    <div class="grid-funcionarios">
-        <h2>Colaboradores</h2>
-        {% if funcionarios %}
-            {% for funcionario in funcionarios %}
-                <div class="card card-funcionario">
-                    <h3>{{ funcionario.nome }}</h3>
-                    <p>{{ funcionario.cargo }}</p>
-                    <div class="card-footer">
-                        <a href="{{ url_for('main.perfil', id=funcionario.id) }}" class="btn btn-primario btn-ver-perfil">Ver Perfil</a>
+    <section class="painel-conteudo">
+        <div class="dashboard-stats card">
+            <div>
+                <h2>Resumo</h2>
+                <p><strong>{{ total_colaboradores }}</strong> colaboradores</p>
+            </div>
+            <div class="top-skills">
+                <h2>Top 5 skills</h2>
+                {% if top_skills %}
+                    <ul>
+                    {% for item in top_skills %}
+                        <li>{{ item.skill }} ({{ item.count }})</li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>Sem dados de skills no momento.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="grid-funcionarios">
+            <h2>Colaboradores</h2>
+            {% if funcionarios %}
+                {% for funcionario in funcionarios %}
+                    <div class="card card-funcionario">
+                        <h3>{{ funcionario.nome }}</h3>
+                        <p>{{ funcionario.cargo }}</p>
+                        {% if funcionario.melhor_compatibilidade %}
+                            <p>Melhor compatibilidade: <span class="numero-destaque">{{ funcionario.melhor_compatibilidade }}%</span></p>
+                        {% endif %}
+                        <div class="card-footer">
+                            <a href="{{ url_for('main.perfil', id=funcionario.id) }}" class="btn btn-primario btn-ver-perfil">Ver Perfil</a>
+                        </div>
                     </div>
-                </div>
-            {% endfor %}
-        {% else %}
+                {% endfor %}
+            {% else %}
                 <p>Nenhum funcionário encontrado.</p>
             {% endif %}
         </div>
-</section>
+
+        <div class="card">
+            <h2>Skill Gap por Projeto</h2>
+            {% if gap %}
+                <table class="heatmap">
+                    <thead>
+                        <tr>
+                            <th>Projeto</th>
+                            <th>Skills (cobertura)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for proj in gap %}
+                            <tr>
+                                <td>{{ proj.nome }}</td>
+                                <td>
+                                    <div class="heatmap-row">
+                                        {% for c in proj.cobertura %}
+                                            <span class="heatmap-cell" data-percent="{{ c.percent }}">
+                                                {{ c.skill }} ({{ c.percent }}%)
+                                            </span>
+                                        {% endfor %}
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>Sem dados de projetos.</p>
+            {% endif %}
+        </div>
+    </section>
+</div>
 {% endblock %}
