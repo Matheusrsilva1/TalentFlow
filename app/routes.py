@@ -306,7 +306,7 @@ def graficos():
         else:
             dist_values[4] += 1
 
-    projetos = list(db.projetos.find({}, {'_id': 0})) if db else []
+    projetos = list(db.projetos.find({}, {'_id': 0})) if db is not None else []
     mapa_func = {f['id']: f for f in funcionarios}
     proj_labels = []
     proj_values = []
